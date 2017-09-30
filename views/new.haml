@@ -1,0 +1,115 @@
+.newurl
+  .panel.panel-primary
+    .panel-heading
+      %h3.panel-title Вы успешно создали ссылку
+    .panel-body
+      %h4 Теперь вы можете распространять эту ссылку:
+      %input.form-control{style: 'background-color: #F6FFFF', type: 'text', readonly: 'readonly', value: @url, onClick: 'this.select();'}
+    - if @metas
+      - @metas.each do |k,m|
+        .list-group
+          .ali.list-group-item{class: m[:content].nil?||m[:content].empty? ? 'show':'hide'}
+            %h4.list-group-item-heading #{m[:label]}
+            - if k==:description
+              .list-group-item-text.input-group.textarea-group
+                %textarea.form-control{placeholder: "Рекомендуется написать #{m[:label]}"} #{m[:content]}
+                %span.input-group-btn
+                  %button.btn.btn-success.do{name: @urlid, id: k} Сохранить
+            - else
+              .list-group-item-text.input-group
+                %input.form-control{type: 'text', placeholder: "Рекомендуется написать #{m[:label]}", value: m[:content]}
+                %span.input-group-btn
+                  %button.btn.btn-success.do{name: @urlid, id: k} Сохранить
+          .ali.list-group-item.to-edit{class: m[:content].nil?||m[:content].empty? ? 'hide':'show'}
+            %h4.list-group-item-heading
+              #{m[:label]}
+              %span.notice.label
+                %strong Сохранено
+            %p.list-group-item-text #{m[:content]}
+    %ul.nav.nav-pills.alist
+      - if @metas
+        %li
+          %a#to-my.text-success{href: @url, target: '_blank'} Посмотреть как выглядит эта ссылка
+      %li
+        %form{method: 'post', action: "/do/delete/#{@urlid}?to=/my"}
+          %input#delete.btn.btn-link{type: 'submit', value: 'Удалить эту ссылку'}
+
+    #accordion.panel-group{'aria-multiselectable' => 'true', role: 'tablist'}
+      .panel.panel-info
+        #headingOne.panel-heading{role: 'tab'}
+          %h4.panel-title
+            %a.collapsed{'aria-controls' => 'collapseOne', 'aria-expanded' => 'true', 'data-parent' => '#accordion', 'data-toggle' => 'collapse', href: '#collapseOne', role: 'button'}
+              Как я могу заработать на этой ссылке?
+        #collapseOne.panel-collapse.collapse.in{'aria-labelledby' => 'headingOne', role: 'tabpanel'}
+          .panel-body
+            %p Ссылаясь на какой-нибудь нужный всем файл или актуальную статью, вы можете распространять эту ссылку в интернете: на форумах, в социальных сетях и пр.
+            %p Или же просто делитесь этой ссылкой с друзьями и знакомыми.
+      - if @metas
+        .panel.panel-info
+          #headingTwo.panel-heading{role: 'tab'}
+            %h4.panel-title
+              %a.collapsed{'aria-controls' => 'collapseTwo', 'aria-expanded' => 'false', 'data-parent' => '#accordion', 'data-toggle' => 'collapse', href: '#collapseTwo', role: 'button'}
+                Как правильно заполнить эти поля?
+          #collapseTwo.panel-collapse.collapse{'aria-labelledby' => 'headingTwo', role: 'tabpanel'}
+            .panel-body
+              %p
+                %strong Описание
+                должно кратко описывать сам сайт или ту страницу, на которую вы ссылаетесь.
+              %p
+                Например:
+                %em На этом сайте можно скачать много музыки разных жанров, а конкретно на этой странице можно бесплатно скачать hip-hop.
+              %p
+                %strong Ключевые слова
+                \- это то, что люди пишут в поисковике, чтобы найти что-то. То есть, слова и словочитания, с которыми можно ассоциировать содержание ссылки.
+              %p
+                Например:
+                %em скачать бесплатно, музыка, хиты, скачать hip-hop
+              %p Постарайтесь придумать как можно больше вариантов. Записывать можно через запятую, либо просто пробел.
+        .panel.panel-info
+          #headingThree.panel-heading{role: 'tab'}
+            %h4.panel-title
+              %a.collapsed{'aria-controls' => 'collapseThree', 'aria-expanded' => 'false', 'data-parent' => '#accordion', 'data-toggle' => 'collapse', href: '#collapseThree', role: 'button'}
+                Зачем нужно описание и ключевые слова?
+          #collapseThree.panel-collapse.collapse{'aria-labelledby' => 'headingThree', role: 'tabpanel'}
+            .panel-body
+              %p В первую очередь, это нужно для пользователей, которые переходят по ссылке.
+              %p А также, это необходимо для поисковика, чтобы он предлагал вашу ссылку всем, кто её ищет.
+
+:javascript
+  $('.list-group').on('click','.to-edit', function(){
+      $(this).removeClass('show').addClass('hide').prev().removeClass('hide').addClass('show')
+    })
+
+  $('.list-group').on('click','.do', function(){
+    var hisparent=$(this).parents('.ali')
+    hisparent.removeClass('show').addClass('hide').next().removeClass('hide').addClass('show')
+
+    var forwho=$(this).attr('name')
+    var who=$(this).attr('id')
+    var what=$(this).parent().prev().val()
+    $.ajax({
+      url: '/do/save/'+forwho,
+      data: who+'='+encodeURIComponent(what),
+      dataType: 'text',
+      type: 'post',
+      success: function(result) {
+        if(result&&['err','id','type'].indexOf(result)>=0){
+          var err={
+              id: 'Цель не идентифицирована!',
+              type: 'Неверный запрос!',
+              err: 'Ошибка!'
+          }
+          $('.notice').addClass('danger')
+          $('.notice').html(err[result])
+        }else $('.notice').removeClass('danger')
+      },
+      complete: function() {
+        if(!$('.notice').hasClass('danger')){
+          if(what=='') what='<em>Рекомендуется заполнить!</em>'
+          hisparent.next().find('p').html(what)
+          $('.notice').html('Сохранено')
+        }
+        hisparent.next().find('.notice').fadeIn(800).css("display","inline-block").fadeOut(1200)
+      }
+    })
+  })

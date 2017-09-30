@@ -1,0 +1,65 @@
+.catalog{style: 'margin: 0 auto; width: 800px;'}
+  .panel.panel-default
+    -#{style: 'margin:0'}
+    - if @qwe.nil?
+      %h1{style: 'margin-left:20px; font-size:24pt; margin-top:10px;'} Каталог ссылок
+      .panel-body{style: 'padding:0'}
+        %ol.breadcrumb{style: 'margin:0'}
+          %li.active Каталог ссылок
+      %table.table
+        %tr
+          %td
+            %a{href: '?item=Игры'} Игры
+          %td
+            %a{href: '?item=Фильмы'} Фильмы
+          %td
+            %a{href: '?item=Бесплатно'} Бесплатно
+          %td
+            %a{href: '?item=Скачать'} Скачать
+        %tr
+          %td
+            %a{href: '?item=Сериалы'} Сериалы
+          %td
+            %a{href: '?item=Торрент'} Торрент
+          %td
+            %a{href: '?item=Музыка'} Музыка
+          %td
+            %a{href: '?item=Книги'} Книги
+        %tr
+          %td
+            %a{href: '?item=Книги'} Книги
+          %td
+            %a{href: '?item=Форум'} Форум
+          %td
+            %a{href: '?item=Мистика'} Мистика
+          %td
+            %a{href: '?item=Радио'} Радио
+
+    - else
+      %h1{style: 'margin-left:20px; font-size:24pt; margin-top:10px;'} #{@qwe.capitalize}
+      .panel-body{style: 'padding:0'}
+        %ol.breadcrumb{style: 'margin:0'}
+          %li
+            %a{href: '/catalog'} Каталог ссылок
+          %li.active
+            #{@qwe.capitalize}
+            %span.badge #{@list.size}
+      .list-group
+        - @list.each do |item|
+          %a.list-group-item{href: "/#{item[:id].to_s(36)}"} #{item[:title]}
+  -#%nav
+  -#  %ul.pagination.pagination-lg
+  -#    %li.disabled
+  -#      %a{'aria-label' => 'Previous', href: ''}
+  -#        %span{'aria-hidden' => 'true'} «
+  -#    %li.active
+  -#      %a{href: '#'}
+  -#        1
+  -#        %span.sr-only (current)
+  -#    %li
+  -#      %a{href: '#'}
+  -#        2
+  -#        %span.sr-only (current)
+  -#    %li.disabled
+  -#      %a{'aria-label' => 'Next', href: ''}
+  -#        %span{'aria-hidden' => 'true'} »

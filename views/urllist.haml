@@ -1,0 +1,266 @@
+.my
+  .panel.panel-primary
+    .panel-heading
+      %h3.panel-title Заработайте на любой ссылке
+    .panel-body
+      - if flash[:err]
+        .alert.alert-danger
+          =@err[flash[:err].to_sym]
+      %form{method: :post, action: :new}
+        .input-group
+          %span.input-group-addon{style: 'background-color: #F6FFFF;'}
+            %abbr.small.file-check{title: 'Отметьте, если это прямая ссылка на файл'} Файл?
+            %input#file{type: :checkbox, name: :file, value: 1}
+          %input.form-control{placeholder: 'Заработать на этой ссылке', name: :url, type: :text}/
+          %span.input-group-btn
+            %button.btn.btn-primary Добавить
+        .input-group#file-name{style: 'margin-top:10px; display: none'}
+          %span.input-group-addon#label{style: 'background-color: #F6FFFF;'} Имя файла:
+          %input.form-control{placeholder: 'Имя файла', name: :title, type: :text}
+          %span.input-group-addon#title{style: 'background-color: #F6FFFF;'} .exe
+    %ul.list-group.collapse.small#info
+      %li.list-group-item
+        Всего переходов:
+        %span.badge.alert-info
+          =@clicks
+      %li.list-group-item
+        Всего
+        %abbr{title: 'Оплачиваемый переход - это уникальный пользователь, которому открылась реклама'} оплачиваемых переходов
+        \:
+        %span.badge.alert-info
+          =@uniques
+      %li.list-group-item
+        Всего оплачиваемых переходов на файл:
+        %span.badge.alert-info #{@f_uniques}
+      %li.list-group-item
+        Стоимость оплачиваемого перехода:
+        %span.badge.alert-info #{@sal[:salary]} р.
+      %li.list-group-item
+        Стоимость оплачиваемого перехода на файл:
+        %span.badge.alert-info #{@sal[:fsalary]} р.
+      %li.list-group-item
+        %strong Всего заработано:
+        %span.badge.alert-success #{@done} р.
+      %li.list-group-item
+        %em
+          Уже
+          %a{href:'/money'} выведено:
+        %span.badge.alert-warning #{@already} р.
+    .panel-footer.text-center
+      %a.text-info{href: '#info','data-toggle'=>'collapse','aria-expanded'=>'false'} Посмотреть общую информацию по моим ссылкам
+
+  .btn-group.btn-group-sm.btn-group-justified{style: 'margin-bottom:10px'}
+    %a.btn.btn-primary{href: '/my', class: (@by==:time || @by==nil) && 'active'} Новые
+    %a.btn.btn-primary{href: '/my?by=uniques', class: @by==:uniques && 'active'} Оплачиваемые переходы
+    %a.btn.btn-primary{href: '/my?by=title&on=asc', class: @by==:title && 'active'} Сортировать по заголовку
+
+  %ul.nav.nav-pills{style: 'margin-bottom: 20px;'}
+    %li.active
+      %a.text-info{href: '#urls', 'aria-controls' => :all, 'data-toggle' => :pill}
+        Обычные ссылки
+        %span.badge.alert-success#badge-urls #{@urls_data.select{|key, hash| key[:hidden] != 1}.size}
+    %li
+      %a.text-info{href: '#files', 'aria-controls' => :files, 'data-toggle' => :pill}
+        Прямые ссылки на файл
+        %span.badge.alert-success#badge-files #{@files_data.select{|key, hash| key[:hidden] != 1}.size}
+
+  .tab-content
+    .tab-pane.fade.in.active#urls
+      - unless @urls_data.empty?
+        - @urls_data.each do |e|
+          - if e[:hidden]!=1
+            .url_data
+              .panel{class: e.has_value?(nil) || e.has_value?('')? 'panel-danger':'panel-info'}
+                .panel-heading
+                  %small
+                    %button.btn.btn-xs.btn-primary.collapser{'data-target'=>"#content#{e[:id]}",'data-toggle'=>'collapse','aria-expanded'=>'false'}
+                      Правка
+                    %button.do.delete.btn.btn-xs.btn-danger.alert-danger{value: e[:id], name: :delete}Удалить
+                  %h3.panel-title{class:e[:title].nil?||e[:title].empty? ? 'has-error has-feedback':''}
+                    %a{href: e[:id].to_s(36), target: '_blank', title: e[:title]} #{e[:title]}
+                    %input.form-control#title{value: e[:title], type: :text, placeholder: 'Рекомендуется написать заголовок'}
+                .panel-body.collapse{id: "content#{e[:id]}"}
+                  %dl
+                    %dd.form-group
+                      %label
+                        Ссылка ( Вы всегда можете добавить новую ссылку ):
+                      %input.form-control#url{value: e[:url], type: :text, placeholder: 'Необходима ссылка!'}
+                    %dd.form-group{class:e[:description].nil?||e[:description].empty? ? 'has-error has-feedback':''}
+                      %label
+                        Описание (
+                        %abbr.small{title: "Краткое описание сайта или страницы, на которую вы ссылаетесь. \nНапример: На этом сайте можно скачать много музыки разных жанров, а конкретно на этой странице, можно бесплатно скачать hip-hop."} Что здесь должно быть?
+                        ):
+                      %textarea.form-control#description{placeholder:'Рекомендуется написать описание'}
+                        =e[:description]
+                    %dd.form-group{class:e[:keywords].nil?||e[:keywords].empty? ? 'has-error has-feedback':''}
+                      %label
+                        Ключевые слова / Теги (
+                        %abbr.small{title: "Ряд слов или словочитаний (через запятую, либо просто через пробел), с которыми можно ассоциировать содержание сайта или страницы, на которую вы ссылаетесь. \nНапример: скачать бесплатно, музыка, хиты, hip-hop"} Что здесь должно быть?
+                        ):
+                      %input.form-control#keywords{value: e[:keywords], type: 'text', placeholder: 'Рекомендуется написать ключевые слова'}
+                    %dd.form-group
+                      %button.do.save.btn.btn-sm{class: e.has_value?(nil)||e.has_value?('') ? 'btn-danger':'btn-success',value:e[:id],name:'save'} Сохранить
+                      %button.do.delete.btn.btn-sm.btn-danger{value: e[:id], name:'delete'} Удалить
+                      %button.btn.btn-sm.btn-primary.collapser{'data-target'=>"#content#{e[:id]}",'data-toggle'=>'collapse','aria-expanded'=>'false'} Свернуть
+                .panel-footer.input-group
+                  %span.notice.label
+                    %strong Сохранено
+                  %span.input-group-addon.with-spread-url
+                    Переходов:
+                    %span.badge.alert-info
+                      =e[:clicks]
+                    Оплачиваемых переходов:
+                    %span.badge.alert-info
+                      =e[:uniques]
+                    %br/
+                    Создано:
+                    %em.small.text-info
+                      =Date.parse(e[:time]).strftime('%d.%m.%Y')
+                    , Последнее посещение:
+                    %em.small{class: Date.today.strftime('%s').to_i-Date.parse(e[:lasttime]).strftime('%s').to_i>=604800 ? 'text-warning':'text-success'}
+                      =Date.parse(e[:lasttime]).strftime('%d.%m.%Y')
+                  %input.input-lg.form-control{style: 'background-color:#F0F9FD', title: 'Ссылка для распространения', value: "#{request.base_url}/#{e[:id].to_s(36)}", type: :text, readonly: :readonly, onClick: 'this.select();'}
+      - else
+        .alert.alert-warning У вас еще нет ни одной ссылки
+    .tab-pane.fade#files
+      - unless @files_data.empty?
+        - @files_data.each do |e|
+          - if e[:hidden]!=1
+            .url_data
+              .panel.panel-info.url_data
+                .panel-heading
+                  %small
+                    %button.do.delete.is-file.btn.btn-xs.btn-danger.alert-danger{value: e[:id], name: :delete} Удалить
+                  %h3.panel-title
+                    %a{href: e[:id].to_s(36)} #{e[:title]}
+                .panel-footer.input-group
+                  %span.input-group-addon.with-spread-url
+                    Переходов:
+                    %span.badge.alert-info #{e[:clicks]}
+                    Оплачиваемых переходов:
+                    %span.badge.alert-info #{e[:uniques]}
+                    %br/
+                    Создано:
+                    %em.small
+                      =Date.parse(e[:time]).strftime('%d.%m.%Y')
+                    , Последнее посещение:
+                    %em.small{class: Date.today.strftime('%s').to_i-Date.parse(e[:lasttime]).strftime('%s').to_i>=604800 ? 'text-warning':'text-success'}
+                      =Date.parse(e[:lasttime]).strftime('%d.%m.%Y')
+                  %input.input-lg.form-control{style: 'background-color:#F0F9FD', title: 'Ссылка для распространения', type: :text, readonly: :readonly, onClick: 'this.select();', value: "#{request.base_url}/#{e[:id].to_s(36)}"}
+      - else
+        .alert.alert-warning У вас еще нет ни одной ссылки на файл
+    .text-muted.small{style: 'margin-bottom:20px'}
+      Переходы по вашим ссылкам тщательно анализируются, поэтому накрутка бесмысленна. В случае её обнаружения, ваш аккаунт будет
+      %strong удален.
+      Также имейте ввиду, что администрация имеет право
+      %strong списать
+      часть денег за ваш трафик с низким качеством. Всякие китайцы и кликботы не пройдут.
+
+
+:javascript
+  $('.my').on('change', '#file', function(){
+    if($(this).is(':checked'))
+      $('#file-name').fadeIn(300)
+    else $('#file-name').fadeOut(150)
+  })
+
+  $('a #urls').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+  })
+  $('a #files').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+  })
+
+  $('.url_data').on('keyup','.form-control',function(){
+    var save=$(this).parents('dl').find('.save');
+    if($(this).val().trim().length==0){
+      $(this).parent().addClass('has-error has-feedback')
+      $(this).parents('.panel').removeClass('panel-info').addClass('panel-danger')
+    }else{
+      $(this).parent().removeClass('has-error has-feedback')
+      if(!$(this).parents('.panel').find('.has-error').html())
+        $(this).parents('.panel').removeClass('panel-danger').addClass('panel-info')
+    }
+    if($(this).parents('.panel').hasClass('panel-danger')){
+      save.removeClass('btn-success').addClass('btn-danger')
+    }else{
+      save.removeClass('btn-danger').addClass('btn-success')
+    }
+  })
+
+  $('.url_data').on('click','.collapser,.do.save',function(){
+    var title=$(this).parents('.url_data').find('.panel-title')
+    if(title.parent().next().hasClass('in')){
+      title.parent().animate({'height':'38px'}, 500);
+      title.children('input').fadeOut(100,function(){
+        $(this).prev().fadeIn(500)
+      })
+    }else{
+      title.parent().animate({'height':'55px'}, 500);
+      title.children('a').fadeOut(100,function(){
+        $(this).next().fadeIn(500)
+      })
+    }
+  })
+
+  $('.url_data').on('click','.do',function(){
+    var buttdo=$(this)
+    var id=$(this).val()
+    var type=$(this).attr('name')
+    var caption=$(this).html().substr(0,$(this).html().length-3)
+    var send_data=''
+    if(type=='save'){
+      buttdo.parents('.panel').find('.form-control').each(function(){
+        send_data+='&'+$(this).attr('id')+'='+encodeURIComponent($(this).val())
+      })
+    }
+    $.ajax({
+      url: '/do/'+type+'/'+id,
+      data: send_data,
+      dataType: 'text',
+      type: 'post',
+      success: function(result) {
+        if(result&&['err','id','type','url'].indexOf(result)>=0){
+          var err={
+              id: 'Ссылка не идентифицирована!',
+              type: 'Неверный запрос!',
+              url: 'Неверный формат ссылки!',
+              err: 'Ошибка!'
+          }
+          $('.notice').addClass('danger')
+          $('.notice').html(err[result])
+        }else $('.notice').removeClass('danger')
+      },
+      beforeSend: function() {
+        buttdo.addClass('disabled')
+        buttdo.html(caption+'яется...')
+        buttdo.parents('.url_data').find('.form-control').attr('disabled','')
+      },
+      error: function (request,status,err){
+        $('.notice').addClass('danger')
+      },
+      complete: function() {
+        buttdo.parents('.collapse').collapse('hide')
+        if(!$('.notice').hasClass('danger'))
+          $('.notice').html(caption+'ено')
+
+        if(type=='delete'&&!$('.notice').hasClass('danger')){
+          buttdo.parents('.panel').find('.notice').fadeIn(0)
+          buttdo.parents('.url_data').fadeOut(800)
+
+          counts=buttdo.hasClass('is-file')? '#badge-files':'#badge-urls'
+          $(counts).html($(counts).html()-1)
+        }else{
+          title=buttdo.parents('.panel').find('input#title')
+          title.prev().html(title.val())
+          buttdo.parents('.panel').find('.notice').fadeIn(800).fadeOut(1200)
+          buttdo.removeClass('disabled')
+          buttdo.html(caption+'ить')
+          buttdo.parents('.url_data').find('.form-control').removeAttr('disabled')
+        }
+      }
+    });
+  })
+

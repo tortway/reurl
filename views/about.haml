@@ -1,0 +1,93 @@
+-#%form{method: 'post', action: '/do/delete/94'}
+-#  %input{type: 'hidden', name: 'tmp', value: 'asd0845447221qwec05fb107618cc683'}
+-#  -#%input{type: 'hidden', name: 'url', value: 'lostfilm.tv'}
+-#  %input.btn.btn-warning{type: 'submit', value: 'тест'}
+.about
+  .col-sm-6.col-md-4.panelka#blink
+    .thumbnail
+      %img{alt: 'Заработок для пользователей', :src => '/imgs/user.png'}/
+      .caption
+        %h3 Пользователям
+        %p Кто-то просит у вас ссылку? Вы можете заработать на этом! Отправьте ссылку используя наш сервис и вы будете получать деньги за каждый переход.
+        %p
+          Чтобы начать, вам достаточно
+          %kbd.alert-info.add добавить
+          свою ссылку нам на сайт, либо использовать наш специальный плагин для браузера, который сделает всё сам, вам достаточно будет лишь выделить ссылку и нажать правую кнопку мыши.
+        .panel-footer
+          .buttstep
+            - if flash[:err]
+              .alert.alert-danger
+                =@err[flash[:err].to_sym]
+            %form{method: 'post', action: 'new'}
+              .input-group
+                %input.add.form-control{placeholder: 'Заработать на этой ссылке', name: 'url', type: 'text'}/
+                %span.input-group-btn
+                  %button.btn.btn-primary Добавить
+            %a.btn.btn-default{href: 'https://addons.mozilla.org/ru/firefox/addon/reurl/', role: 'button', target: :_blank}
+              Плагин Firefox
+              %span
+                %img{src: '/imgs/plugin-f.png'}
+            %a.btn.btn-default{href: '#', role: 'button', target: :_blank, disabled: :disabled}
+              Плагин Google Chrome
+              %span
+                %img{src: '/imgs/plugin-gc.png'}
+  .col-sm-6.col-md-4.panelka
+    .thumbnail
+      %img{alt: 'Заработок для вебмастеров', :src => '/imgs/webmaster.png'}/
+      .caption
+        %h3 Вебмастерам
+        %p Сайт поддерживает API, а значит вы можете автоматизировать свой заработок на ваших сайтах!
+        %p Например, если ваши сайты располагают ссылками на скачивание, используйте наш сервис, чтобы вы могли зарабатывать на прямых ссылках. Для этого, кроме самого API, вы можете использовать уже готовые классы на php и ruby.
+        .panel-footer.buttstep
+          %a.btn.btn-primary{href: '/api', role: 'button'} Ознакомиться с API
+          %a.btn.btn-default{href: '#', role: 'button', disabled: :disabled} Получить готовый код
+  .col-sm-6.col-md-4.panelka
+    .thumbnail
+      %img{alt: 'Заработок для рекламодателей', :src => '/imgs/urlgiver.png'}/
+      .caption
+        %h3 Рекламодателям
+        %p Помимо таргетинга по странам, подавляющее число ссылок имеет свои ключевые слова, а значит, вы можете показывать рекламу только тем посетителям, которые переходят на сайты близкие по тематике с вашей рекламой, что позволит вам получать только потенциально заинтересованных посетителей.
+        .panel-footer.buttstep
+          %a.btn.btn-primary{href: 'mailto:tortway@ro.ru', role: 'button'} Связаться с нами
+          %a.btn.btn-default{href: '/stats', role: 'button'} Посмотреть статистику
+  .col-sm-6.col-md-4.panelka
+    .caption
+      %h3 Уже получили деньги (топ-5)
+      %ul.list-group
+        - @top.each_with_index do |pos,index|
+          %li.list-group-item
+            #{index+1}. #{pos[:lgn]||='Неизвестный'}
+            %span.badge.alert-info #{pos[:'cast(paydone as number) as top']} р.
+        %li.list-group-item
+          %strong Всего выплачено
+          %span.badge.alert-info #{@top.inject(0){|sum,hash| sum+hash[:'cast(paydone as number) as top']}} р.
+  .col-sm-6.col-md-4.panelka
+    .thumbnail
+      .caption
+        %h3 Последние новости
+        %dl{style:'margin-bottom:0'}
+          %dt Плагин Google Chrome пока не доступен
+          .small Вчера, 19:01
+          %dd Плагин еще находится в разработке. В то же время, плагин для FF уже доступен для использования.
+
+%script{type: 'text/javascript', src: '/js/isotope.pkgd.min.js'}
+
+:javascript
+  $('.about').on('click','kbd.add', function(){
+    $('input.add').focus()
+  })
+  $(window).load(function() {
+    $('.about').isotope({
+      itemSelector: '.panelka',
+    })
+
+     $('#blink').delay(1000).animate({
+                    "left": "-=10px"
+                  }, 150, function() {
+                     $(this).animate({
+                                    "left": "+=20px"
+                                  }, 150, function() {
+                                    $(this).animate({"left": "-=10px"}, 150)
+                                  });
+                  });
+  });

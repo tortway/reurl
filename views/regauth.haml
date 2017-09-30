@@ -1,0 +1,38 @@
+.regauth
+  .panel.panel-primary
+    .panel-heading
+      %h3.panel-title Регистрация / Авторизация
+    .panel-body
+      - if flash[:err]
+        .alert.alert-danger
+          =@err[flash[:err].to_sym]
+      %form{method: 'post'}
+        %dl
+          %dd
+            %label Имя:
+            %input.form-control{type: 'text', name: 'lgn'}
+          %dd
+            %label Пароль:
+            %input.form-control{type: 'password', name: 'psw'}
+          %dd
+            %label Введите код на картинке:
+            .input-group.reurl-captcha
+              %span.input-group-btn
+                =captcha_image_tag
+              %input#captcha_answer.input-lg.form-control{type: 'text', name: 'captcha_answer'}
+              -#%p Введите код, который на картинке
+          %dd.buttstep
+            %input.btn.btn-primary{type: 'submit', name:'reg', value: 'Зарегистрироваться'}
+            %input.btn.btn-success.alert-success.opposite{type: 'submit', name:'auth', value: 'Войти'}
+    - if @acc_data
+      .panel-footer
+        %p
+          ID вашего аккаунта:
+          =@acc_data[:accid]
+        %p
+          %code.alert-info Зарегистрируйте
+          свой аккаунт, чтобы заходить с другого браузера или компьютера.
+        %p
+          Если у вас уже
+          %code.alert-success есть аккаунт
+          \- войдите и тогда этот аккаунт будет присоединен к зарегистрированному.

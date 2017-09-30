@@ -1,0 +1,126 @@
+.admin
+  .panel.panel-default
+    %ul.nav.nav-pills
+      %li.active
+        %a{href: '/admin'} Рекламодатели
+      %li
+        %a{href: '/admin/cashout'} Запросы на вывод средств
+    -#.panel-heading
+    -#  %h3.panel-title Реклама
+    .div1
+      %table.table.table-striped.table-bordered
+        %thead
+          %tr
+            %th
+              %a{href: '/admin?by=mid'} #
+            %th
+              %a{href: '/admin?by=name'} Название
+            %th Показы(%)
+            %th
+              %a{href: '/admin?by=uniques'} Всего
+            %th Сегодня
+            %th Цена(р.)
+            %th Получено(р.)
+            %th Отдано(р.)
+        %tbody
+          - @mon.each do |m|
+            %tr.text-center
+              %th.text-center
+                %a.text-danger{href: "/admin/delete/#{m[:mid]}"} Удалить
+              %td.text-left
+                %a{href: m[:target], target: '_blank'}
+                  =m[:name]
+              %td
+                =m[:ratio]
+              %td #{m[:uniques]}/#{m[:stop]!=0? m[:stop]:'..'}
+              %td #{@uniques[m[:mid]]||=0}
+              - if m[:sum]==0
+                %td
+                  =m[:pay]
+                %td #{-(@total_t-@total_t+=(m[:uniques]*m[:pay].to_f).round(2)).round(2)}
+              - else
+                %td
+                  %abbr{title: 'eCPC - профит деленный на число поступивших уников'} #{m[:uniques]>0?(m[:sum]/m[:uniques]).round(2):0}
+                %td #{m[:sum]}
+              - if m[:keywords]=='direct_link_to_file'
+                %td #{-(@total_g-@total_g+=(m[:uniques]*@tuning[:fsalary].to_f).round(2)).round(2)}
+              - else
+                %td #{-(@total_g-@total_g+=(m[:uniques]*@tuning[:salary].to_f).round(2)).round(2)}
+            %tr.small
+              %td{colspan:3}
+                %em Страны:
+                =m[:geo]
+              %td{colspan:5}
+                %em Ключевые слова:
+                =m[:keywords]
+          %tr.text-center
+            %th #
+            %td Общее
+            %td -
+            %td #{@mon.inject(0){|sum,hash| sum+hash[:uniques]}}
+            %td #{@uniques.values.inject(0){|sum,v| sum+v}}
+            %td -
+            %td #{(@total_t+@mon.inject(0){|sum,hash| sum+hash[:sum].to_f}).round(2)}
+            %td #{@total_g.round(2)}
+    .panel-body
+      .regauth
+        %form{method: 'post'}
+          - if flash[:err]
+            - puts flash
+            .alert.alert-danger
+              =@err[flash[:err].to_sym]
+          %dl
+            %dd
+              %label Название:
+              %input.form-control{type: 'text', name: 'name'}
+            %dd
+              %label Рекламная ссылка:
+              %input.form-control{type: 'text', name: 'target'}
+            %dd
+              %label Получать за уника:
+              .input-group
+                %input.form-control{type: 'text', name: 'pay'}
+                %span.input-group-addon#pay р.
+            %dd
+              %label Максимум уников (0 = неограничено):
+              %input.form-control{type: 'text', name: 'stop', value: 0}
+            %dd
+              %label Вероятность показа:
+              .input-group
+                %input.form-control{type: 'text', name: 'ratio', value: 100}
+                %span.input-group-addon#ratio %
+            %dd
+              %label Страны:
+              %input.form-control{type: 'text', name: 'geo'}
+            %dd
+              %label Ключевые слова:
+              %input.form-control{type: 'text', name: 'keywords'}
+            %dd
+              %label
+              %input.form-control.btn.btn-primary{type: 'submit', value: 'Добавить'}
+    .panel-footer
+      .regauth
+        %form{method: 'post', action: '/admin/config'}
+          %dl
+            %dd
+              %label Отдавать за уника:
+              .input-group
+                %input.form-control{type: 'text', name: 'salary', value: @tuning[:salary]}
+                %span.input-group-addon#salary р.
+            %dd
+              %label Отдавать за скачивание:
+              .input-group
+                %input.form-control{type: 'text', name: 'fsalary', value: @tuning[:fsalary]}
+                %span.input-group-addon#fsalary р.
+            %dd
+              %label Куда направлять пропущенный трафик:
+              %input.form-control{type: 'text', name: 'missedto', value: @tuning[:missedto]}
+            %dd
+              %label
+              %input.form-control.btn.btn-success{type: 'submit', value: 'Сохранить'}
+:javascript
+  $(window).load(function(){
+    if(document.referrer=='http://reurl.ru/admin/cashout')
+      $('.admin').css({'width':'400'});
+      $('.admin').animate({'width':'710'}, 500);
+  });

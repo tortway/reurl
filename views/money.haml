@@ -1,0 +1,55 @@
+.regauth
+  -#.panel.panel-primary{style:'width:55%; float:left'}
+  .panel.panel-primary
+    .panel-heading
+      %h3.panel-title Мои деньги
+    .panel-body
+      %li.list-group-item
+        Всего заработано:
+        %span.badge.alert-info #{@done} р.
+      %li.list-group-item
+        Уже выведено:
+        %span.badge.alert-warning #{@already} р.
+      %li.list-group-item
+        %strong На счету:
+        %span.badge{class: @can_be>=1? 'alert-success':'alert-danger'} #{@can_be} р.
+    - if !@bid
+      - if @can_be>=1
+        .panel-footer
+          %form{method: 'post'}
+            - if flash[:err]
+              .alert.alert-danger
+                =@err[flash[:err].to_sym]
+            %dl
+              %dd
+                %label QIWI-кошелек (Номер телефона):
+                %input.form-control{type: 'text', name: 'qiwi', value: @money[:qiwi]}
+              %dd
+                %label WebMoney-кошелек (WMR):
+                %input.form-control{type: 'text', name: 'webmoney', value: @money[:webmoney]}
+              %dd
+                %label Яндекс.Деньги:
+                %input.form-control{type: 'text', name: 'yandex', value: @money[:yandex]}
+              %dd
+                %label
+                %input.form-control.btn.btn-success{type: 'submit', value: 'Получить деньги'}
+      - else
+        .alert.alert-warning{style:'margin:0'} Для вывода средств нужно иметь минимум 1 рубль.
+    - else
+      .panel-footer{style:'padding-top:20px'}
+        %p Вы отправили запрос на вывод средств.
+        %p В течении дня вы получите свои деньги на один из указанных кошельков.
+        %p.small
+          Сумма, которая будет отправлена:
+          %kbd.alert-info #{@can_be} рублей
+
+  -#.panel.panel-primary{style:'width:42%; float:right'}
+  -#  .panel-heading
+  -#    %h3.panel-title ТОП-12 лучших пользователей
+  -#  %table.table
+  -#    %tbody
+  -#      - (1..12).each do |i|
+  -#        %tr{class: i==1?'alert-success': i==2?'alert-warning': 'alert-default'}
+  -#          %td #{i}
+  -#          %td Вася Пупкин
+  -#          %td 100.05 рублей

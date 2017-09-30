@@ -1,0 +1,126 @@
+!!! HTML
+%html
+  %head
+    %title reurl
+    %link{href: '/css/reurl.css', type: 'text/css', rel: 'stylesheet'}
+    %link{href: '/css/bootstrap.min.css', type: 'text/css', rel: 'stylesheet'}
+    %script{type: 'text/javascript', src: '/js/jquery-1.11.3.min.js'}
+    %meta{'http-equiv' => 'Content-Type', content: 'text/html; charset=UTF-8'}
+    %meta{name: :keywords, content: 'бизнес в интернете, партнерская программа, оплата за просмотры, заработать в интернете, сервис для создания коротких ссылок, заработок в интернете без вложений, укоротить ссылку, заработать на переходах'}
+    %meta{name: :description, content: 'Кто-то просит у вас ссылку? Вы можете заработать на этом! Отправьте ссылку используя наш сервис и вы будете получать деньги за каждый переход. Вы будете получать стабильный доход, раздавая ссылки друзьям, оставляя их на многочисленных форумах и блогах, а также других сайтах в интернете.'}
+  %body
+    %nav.navbar.navbar-default#reurl
+      .container-fluid
+        .navbar-header
+          %a.navbar-brand{href: '/'} reURL
+        %ul.nav.navbar-nav
+          %li{class: @page=='about' && 'active'}
+            %a{href: '/about'} О сайте
+          %li{class: @page=='my' && 'active'}
+            %a{href: '/my'} Мои ссылки
+          %li{class: @page=='money' && 'active'}
+            %a{href: '/money'} Мои деньги
+          %li.dropdown
+            %a.dropdown-toggle{'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown', :href => '#', :role => 'button'}
+              Дополнительно
+              %span.caret
+            %ul.dropdown-menu
+              %li.disabled
+                %a{href: '#'} Плагин для браузера
+              %li.divider{role: 'separator'}
+              %li
+                %a{href: '/api'} API документация
+              %li.disabled
+                %a{href: '#'} Классы php/ruby
+              %li.divider{role: 'separator'}
+              %li
+                %a{href: '/stats'} Статистика
+
+          - if cookies[:id]&&cookies[:a]
+            %p.navbar-text.id
+              Мой id:
+              =cookies[:id]
+              %small
+                (
+                %a.navbar-link{href: '/regauth', title: 'Зарегистрируйте свой аккаунт, чтобы заходить с другого браузера или компьютера'}
+                  Зарегистрировать
+                \/
+                %a.navbar-link{href: '/regauth', title: 'Аккаунты будут объединены'}
+                  Присоединить к другому аккаунту
+                )
+          - elsif cookies[:lgn]&&cookies[:a]
+            %li
+              %p.navbar-text.id
+                Моё имя:
+                =cookies[:lgn]
+                %small
+                  (
+                  %a.navbar-link{href: '/quit'}
+                    Выйти
+                  )
+          - else
+            %li{class: @page=='regauth' && 'active'}
+              %a{href: '/regauth'} Регистрация / Авторизация
+    =yield
+    .step
+    %footer.footer.reurl-footer
+      .container.text-muted.small
+        %p
+          2015 reurl.ru ©
+          -#Skype:
+          -#%a.text-info{href: 'skype:sharfik.satiate?chat'} sharfik.satiate
+          -#\, E-mail:
+          E-mail:
+          %a.text-info{href: 'mailto:tortway@ro.ru'}tortway@ro.ru
+        %p
+          Сервис для
+          %strong создания
+          %strong
+            %a.text-muted{href: 'http://reurl.ru/about'} коротких ссылок,
+          на которых можно
+          %strong
+            %a.text-muted{href: 'http://reurl.ru/about'} заработать.
+          %small
+            %strong Заработок
+            в интернете без вложений,
+            %strong
+              %a.text-muted{href: 'http://reurl.ru/about'} укоротить ссылку,
+            заработать на переходах.
+
+    %script{type: 'text/javascript', src: '/js/bootstrap.min.js'}
+    :javascript
+      //gosha
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-71708305-1', 'auto');
+        ga('send', 'pageview');
+      //yasha
+            (function (d, w, c) {
+                (w[c] = w[c] || []).push(function() {
+                    try {
+                        w.yaCounter34374995 = new Ya.Metrika({
+                            id:34374995,
+                            clickmap:true,
+                            trackLinks:true,
+                            accurateTrackBounce:true
+                        });
+                    } catch(e) { }
+                });
+
+                var n = d.getElementsByTagName("script")[0],
+                    s = d.createElement("script"),
+                    f = function () { n.parentNode.insertBefore(s, n); };
+                s.type = "text/javascript";
+                s.async = true;
+                s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+                if (w.opera == "[object Opera]") {
+                    d.addEventListener("DOMContentLoaded", f, false);
+                } else { f(); }
+            })(document, window, "yandex_metrika_callbacks");
+    %noscript
+      %div
+        %img{src: 'https://mc.yandex.ru/watch/34374995', style: 'position:absolute; left:-9999px;', alt: ''}

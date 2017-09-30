@@ -1,0 +1,66 @@
+.regauth
+  .panel.panel-default
+    %ul.nav.nav-pills
+      %li
+        %a{href: '/admin'} Рекламодатели
+      %li.active
+        %a{href: '/admin/cashout'} Запросы на вывод средств
+    -#.panel-heading
+    -#  %h3.panel-title Запросы на вывод
+    .panel-body
+    - @cashout.each do |c|
+      %li.list-group-item
+        %h4
+          =c[:lgn]
+        %dl.small
+          %dd
+            %label QIWI-кошелек (Номер телефона):
+            =c[:qiwi]
+          %dd
+            %label WebMoney-кошелек (WMR):
+            =c[:webmoney]
+          %dd
+            %label Яндекс.Деньги:
+            =c[:yandex]
+        - u_data=@result_data.select{|key,value| key[:'u.accid']==c[:'o.accid'] && key[:file]==0}
+        - rd=@ref_data.select{|key,value| key[:accid]==c[:'o.accid']}
+        - u_uniques=u_data.inject(0){|sum,hash| sum+hash[:uniques]}
+        - u_unidone=u_data[0][:unidone]
+        - f_data=@result_data.select{|key,value| key[:'u.accid']==c[:'o.accid'] && key[:file]==1}
+        - f_uniques=f_data.inject(0){|sum,hash| sum+hash[:uniques]}
+        - f_unidone=f_data[0][:funidone]
+        %form{method: 'post'}
+          %input{type: 'hidden', name: :accid, value: c[:'o.accid']}
+          %input{type: 'hidden', name: :new_unidone, value: u_uniques-u_unidone}
+          %input{type: 'hidden', name: :new_funidone, value: f_uniques-f_unidone}
+          %input.btn.btn-info{type: 'submit', name: :cancel, value: 'Отклонить', style:'float:right'}
+          %input.btn.btn-primary{type: 'submit', name: :done, value: 'Оплачено', style:'float:right;margin-right:10px'}
+        %p
+          Переходов:
+          %span.badge.alert-info
+            =@result_data.inject(0){|sum,hash| sum+hash[:clicks]}
+        %p
+          Новых/Всего:
+          %span.badge.alert-info
+            #{(u_uniques+f_uniques)-(u_unidone+f_unidone)}/#{u_uniques+f_uniques}
+        %p
+          Итого:
+          %span.badge.alert-info
+            #{((u_uniques-u_unidone)*@sal[:salary].to_f+(f_uniques-f_unidone)*@sal[:fsalary].to_f).round(2)} р.
+        %p
+          Источники:
+          %ul.list-group
+            - rd.each do |r|
+              %li.list-group-item
+                - if r[:ref].nil? || r[:ref].empty?
+                  Прямая ссылка
+                - else
+                  %a{href: "http://#{r[:ref]}"} #{r[:ref]}
+                %span.badge.alert-info #{r[:'count(ref)']}
+
+:javascript
+  $(window).load(function(){
+    if(document.referrer=='http://reurl.ru/admin')
+      $('.regauth').css({'max-width':'710px'});
+      $('.regauth').animate({'max-width':'400'}, 500);
+  });

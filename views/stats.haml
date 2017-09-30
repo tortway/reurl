@@ -1,0 +1,42 @@
+.regauth
+  .panel.panel-primary
+    .panel-heading
+      %h3.panel-title Статистика
+    .panel-body
+      %h4
+        По странам
+        %small (за сегодня)
+        \:
+      %table.table.table-striped.table-bordered
+        %thead
+          %tr
+            %th Страна
+            %th Уникальных переходов
+        %tbody
+          - @geo.each do |e|
+            %tr.text-center
+              %td #{e[0]}
+              %td #{e[1]}
+          %tr.text-center
+            %td
+              %strong Итого
+            %td #{@total}
+      %h4
+        По ключевым словам
+        %small (в разработке)
+        \:
+      %table.table.table-striped.table-bordered
+        %thead
+          %tr
+            %th Ключевое слово
+            %th Количество ссылок
+            %th Уникальных переходов
+        %tbody
+          %tr.text-center
+            %td{colspan:3}
+              %em В разработке
+          %tr.text-center
+            %td
+              %strong Итого
+            %td 0
+            %td 0

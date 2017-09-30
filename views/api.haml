@@ -1,0 +1,116 @@
+.admin
+  .panel.panel-default{style: 'margin-bottom:0'}
+    %ul.nav.nav-pills
+      %li.active
+        %a{href: '/api'} API документация
+      %li.disabled
+        %a{href: '#'} Готовые классы на PHP и Ruby
+  .panel-body
+    %h3#first{style: 'margin-top:0'} Создание ссылки
+    %p
+      %strong POST :
+      %code.alert-info http://reurl.ru/new
+    %ul
+      %li
+        %label Обязательные параметры:
+        %ul{style:'margin-bottom:10px'}
+          %li
+            %code url
+            \- ссылка
+          %li
+            %code tmp
+            \- секретный хеш
+        %p
+          Ваш секретный хеш:
+          %code.alert-warning #{@apihash||'отсутствует'}
+      %li
+        %label Дополнительные параметры для создания простой ссылки:
+        %ul{style:'margin-bottom:10px'}
+          %li
+            %code title
+            \- это заголовок страницы куда ведет ссылка.
+          %li
+            %code description
+            \- это описание страницы куда ведет ссылка.
+          %li
+            %code keywords
+            \- это ключевые слова страницы куда ведет ссылка.
+        %p В случае отсутствия этих параметров, данные будут взяты из метатегов страницы, на которую указывает ссылка.
+      %li
+        %label Дополнительные параметры для создания ссылки на файл:
+        %ul{style:'margin-bottom:10px'}
+          %li
+            %code file
+            \- параметр должен иметь значение
+            %code 1
+          %li
+            %code title
+            \- это название файла, который будет скачиваться.
+        %p
+          В случае отсутствия параметра
+          %code title
+          \, название файла будет взято из ссылки или же будет присвоено имя
+          %code.text-danger install
+          \.
+      %li{style:'margin-bottom:10px'}
+        %label Ответ (JSON):
+        %pre #{'{"url":URL,"id":ID}'}
+        %code URL
+        \- сгенерированная ссылка.
+        %code ID
+        \- id этой ссылки.
+      %li
+        %label Ответ с ошибкой (JSON):
+        %pre #{'{"error":NAME}'}
+        %code NAME
+        \- имя параметра, который вызвал ошибку.
+    %h3#second{style: 'margin-top:0'} Удаление и редактирование ссылки
+    %p
+      %strong POST :
+      %code.alert-info http://reurl.ru/do/_TYPE_/_ID_
+    %ul
+      %li
+        %label Обязательные параметры:
+        %ul
+          %li
+            %label Параметры в ссылке запроса:
+            %ul{style:'margin-bottom:10px'}
+              %li
+                %code _TYPE_
+                \- тип операции:
+                %code delete
+                \- удаление,
+                %code save
+                \- редактирование.
+              %li
+                %code _ID_
+                \- id ссылки
+        %ul{style:'margin-bottom:10px'}
+          %li
+            %code tmp
+            \- секретный хеш
+        %p
+          Ваш секретный хеш:
+          %code.alert-warning #{@apihash||'отсутствует'}
+      %li
+        %label Дополнительные параметры для редактирования ссылки:
+        %ul{style:'margin-bottom:10px'}
+          %li
+            %code title
+            \- это заголовок страницы куда ведет ссылка.
+          %li
+            %code description
+            \- это описание страницы куда ведет ссылка.
+          %li
+            %code keywords
+            \- это ключевые слова страницы куда ведет ссылка.
+      %li
+        %label Ответ (TEXT):
+        %p
+          %code good
+          \- операция выполнена.
+      %li
+        %label Ответ с ошибкой (TEXT):
+        %p Имя параметра, который вызвал ошибку. А также:
+        %code err
+        \- ссылка с таким id отсутствует.

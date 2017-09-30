@@ -1,0 +1,2 @@
+class ReurlError < StandardError
+end

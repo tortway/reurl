@@ -1,0 +1,90 @@
+!!! HTML
+%html
+  %head
+    %title
+      =@data[:title]
+    %link{href: '/css/reurl.css', type: 'text/css', rel: 'stylesheet'}
+    %link{href: '/css/bootstrap.min.css', type: 'text/css', rel: 'stylesheet'}
+    %script{type: 'text/javascript', src: '/js/jquery-1.11.3.min.js'}
+
+    %meta{'http-equiv' => 'Content-Type', content: 'text/html; charset=UTF-8'}
+    %meta{:name => :description, content: @data[:description]}
+    %meta{:name => :keywords, content: @data[:keywords]}
+  %body{style: @data[:accid]==43 ? 'background-image: url(http://bestfilms.cf/public/site_images/background.jpg)' : ''}
+    .to
+      .panel{style: @data[:accid]==43?'border:8px solid #222;border-top-width:0px':'', class:@data[:accid]!=43?'panel-primary':''}
+        .panel-heading{style: @data[:accid]==43?'color:#fff;background-color: #222;border-top-left-radius: 0px;border-top-right-radius: 0px;':''}
+          %h3.panel-title #{@data[:title].nil?||@data[:title].empty? ? 'Переход по ссылке':@data[:title]}
+        .panel-body.text-center
+          .jumbotron{style: 'padding: 80px 0'}
+            .container
+              :javascript
+                function timer(){
+                 var obj=document.getElementById('timer');
+                 obj.innerHTML--;
+
+                 if(obj.innerHTML==0){
+                    _#{@iftimer}();
+                    setTimeout(function(){},1000);
+                  }
+                 else{setTimeout(timer,1000);}
+                }
+                setTimeout(timer,1000);
+              %p{style: 'margin-bottom:5px'}
+                Переадресация через
+                %span{style: 'border-bottom: 1px dashed #000;padding-bottom: 2px'}
+                  %span#timer 20
+                  секунд
+              %p{style: 'font-size:19px'} Если не хотите ждать, нажмите на кнопку ниже
+              %input.reurl.btn.btn-lg.btn-success{type: 'button', onClick: "_#{@go}()", value: 'Перейти по ссылке',title: @data[:keywords]}
+        %ul.nav.nav-pills.alist
+          %li.small
+            %a.info.text-info{href: '/catalog', target: '_blank'}
+              Каталог ссылок
+        - unless @data[:description].nil?||@data[:description].empty?
+          .panel-footer
+            %h1 #{@data[:title].nil?||@data[:title].empty? ? 'ссылки':@data[:title]}:
+            %p
+              #{@data[:description]}
+              %input.btn.btn-sm.btn-link{type: 'button', onClick: "_#{@go}()", value: 'Продолжить...',title: @data[:keywords], style: 'padding:0'}
+
+    %script{type: 'text/javascript', src: '/js/swfstore.min.js'}
+    :javascript
+      #{@js}
+
+      //gosha
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-71708305-1', 'auto');
+        ga('send', 'pageview');
+      //yasha
+            (function (d, w, c) {
+                (w[c] = w[c] || []).push(function() {
+                    try {
+                        w.yaCounter34374995 = new Ya.Metrika({
+                            id:34374995,
+                            clickmap:true,
+                            trackLinks:true,
+                            accurateTrackBounce:true
+                        });
+                    } catch(e) { }
+                });
+
+                var n = d.getElementsByTagName("script")[0],
+                    s = d.createElement("script"),
+                    f = function () { n.parentNode.insertBefore(s, n); };
+                s.type = "text/javascript";
+                s.async = true;
+                s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+                if (w.opera == "[object Opera]") {
+                    d.addEventListener("DOMContentLoaded", f, false);
+                } else { f(); }
+            })(document, window, "yandex_metrika_callbacks");
+    %noscript
+      %div
+        %img{src: 'https://mc.yandex.ru/watch/34374995', style: 'position:absolute; left:-9999px;', alt: ''}
+

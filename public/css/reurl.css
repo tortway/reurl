@@ -1,0 +1,312 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    height: auto;
+    min-height: 100%;
+}
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+}
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+body > footer > .container {
+    padding: 10px 15px 0;
+}
+.container .text-muted {
+    margin: 20px 0;
+}
+
+.footer > .container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-left: 5%;
+}
+.step{
+    min-height:60px;
+}
+.panelka{
+    margin-bottom: 10px;
+}
+.reurl-footer{
+    background-color: #F8F8F8;
+    /*background-color: #D9EDF7;*/
+    /*color: #31708F;*/
+}
+/* -------------------------------------------------- */
+.caption > h3{
+    margin-top: 0;
+}
+
+.reurl-captcha > span > img{
+    width: 100px;
+}
+.reurl-captcha > input{
+    height: 70px;
+    font-size: 20pt;
+}
+.reurl-captcha > p{
+    position: relative;
+    top: 8px;
+    left: 10px;
+}
+
+.admin{
+    margin: 0 auto;
+    width: 710px;
+}
+.my{
+    margin: 0 auto;
+    width: 600px;
+}
+dd{
+    margin-bottom: 5px;
+}
+.panel > .panel-footer{
+    background-color: #F6FFFF
+}
+.notice.label{
+    display: none;
+    float: right;
+    padding: 0.5em 0.8em 0.5em;
+    background-color: #DFF0D8;
+    color: #3C763D;
+    font-size: 8pt;
+    position: absolute;
+}
+.list-group-item-heading > .notice{
+    margin-left: 5px;
+}
+.notice.label.danger{
+    background-color: #F2DEDE;
+    color: #A94442;
+}
+
+.panel-title{
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.panel-heading{
+    height: 38px;
+}
+.panel-heading > small{
+    float: right;
+}
+.panel-heading > small > a{
+    color: inherit;
+    cursor: pointer;
+}
+.panel-body.collapse{
+    padding-bottom: 0;
+}
+.panel-info > .panel-heading{
+    background-color: #D9EDF7;
+    border-color: #D9EDF7;
+    color: #777;
+}
+
+input#title{
+    display: none;
+    width: 95%;
+}
+
+a.navbar-brand{
+    font-size: 20pt;
+    font-weight: 600;
+}
+p.navbar-text.id{
+    margin-left: 15px;
+}
+.about{
+    width: 90%;
+    margin: 0 auto;
+}
+.panelka{
+    padding: 0 10px;
+}
+.caption > .panel-footer{
+    margin: 10px -13px -13px;
+    background-color: #F8F8F8;
+}
+.caption > .panel-footer.buttstep{
+    padding-top: 0;
+    text-align: center;
+}
+.buttstep > a, .buttstep > input{
+    margin-top: 10px;
+}
+ul.nav.navbar-nav > li.active > a{
+    background-color: #E4F4FB;
+}
+ul.nav.navbar-nav > li > a:hover{
+    background-color: #F0F9FD;
+}
+/*.badge.alert-info:hover,*/
+#accordion .panel-info > .panel-heading:hover,
+.ali.to-edit:hover{
+    background-color: #337AB7;
+    color: #fff;
+}
+.container-fluid > .navbar-header > a.navbar-brand,
+.container-fluid > .navbar-header > a.navbar-brand:hover{
+    background-color: #D9EDF7;
+}
+ul.nav.navbar-nav > li.active > a:hover{
+    background-color: #E4F4FB;
+    color: #000;
+}
+
+.regauth{
+    margin: 0 auto;
+    max-width: 400px;
+    width: 100%;
+    min-width: 280px;
+}
+.regauth > .panel > .panel-body > form >  dl{
+    margin-bottom: 0;
+}
+
+.newurl{
+    margin: 0 auto;
+    width: 480px;
+}
+.to{
+    margin: 15px auto;
+    max-width: 480px;
+    width: 100%;
+    min-width: 300px;
+}
+
+.panel-body > .jumbotron{
+    margin-bottom: 0;
+    background-color: #fff;
+}
+.to > .panel > .panel-body{
+    padding: 0;
+}
+
+.opposite{
+    float:right;
+}
+
+.list-group{
+    margin-top: -1px;
+}
+.panel-body > h4{
+    margin-top: 0;
+}
+.textarea-group > textarea{
+    resize: none;
+    height: 91px;
+}
+.textarea-group > span > button{
+    height: 71px;
+}
+.ali.to-edit:hover{
+    cursor: pointer;
+}
+#accordion.panel-group{
+    margin-bottom: 0;
+}
+
+.navbar-default#reurl{
+    background-color: #F6FFFF;
+    border-color: #D9EDF7;
+    /*margin-top: 20px;*/
+}
+.nav.alist{
+    padding:10px;
+}
+.nav.alist > li > .info:hover{
+    background-color: #D9EDF7;
+}
+.nav.alist > li > #to-my:hover{
+    background-color: #DFF0D8;
+}
+.nav.alist > li > form > #delete:hover{
+    background-color: #F2DEDE;
+}
+.nav.alist > li > form > #delete{
+    height: 40px;
+    text-decoration: none;
+    color: #A94442;
+    border-radius: 4px;
+}
+
+.btn.alert-info-invert,
+.alert.alert-info-invert,
+.li.alert-info-invert,
+span.alert-info-invert,
+input.alert-info-invert{
+    background-color: #31708F;
+    color: #fff;
+}
+.list-group#info.in + .panel-footer {
+    border-top-width: 0;
+}
+.list-group#info + .panel-footer {
+    border-top-width: 1px;
+}
+
+kbd.add,kbd.plugin{
+    cursor: pointer;
+}
+
+.file-check{
+    position: relative;
+    top: -2px;
+}
+
+.input-group-addon.with-spread-url{
+    background-color: inherit;
+    border: 0;
+    text-align: left;
+    padding-left: 0;
+}
+
+
+.reurl{
+    border: 0;
+    display: inline-block;
+    font: 20px "Ubuntu Light", "Ubuntu", "Myriad Pro", "Segoe UI", Arial, sans-serif;
+    text-shadow: -1px -1px 2px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 15px 20px -10px #000000;
+    -moz-box-shadow: 0 15px 20px -10px #000000;
+    box-shadow: 0 15px 20px -10px #000000;
+    background-repeat: repeat-x;
+    width: auto;
+}
+.reurl:hover {
+    -webkit-box-shadow: 0 5px 15px -6px #000000;
+    -moz-box-shadow: 0 5px 15px -6px #000000;
+    box-shadow: 0 5px 15px -6px #000000;
+    background-position: 0 -10px;
+}
+.reurl{
+    border: 2px solid #FFF;
+    display: block;
+    font-size: 1.2em;
+    font-weight: 700;
+    padding: 0.5em 1em 0.6em;
+    box-sizing: border-box;
+    transition: box-shadow 0.3s ease 0s;
+}
+
+.panel-footer > h1{
+    font-size:18px;
+    margin-top:10px;
+    margin-bottom:10px;
+}
